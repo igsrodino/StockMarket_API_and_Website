@@ -1,2 +1,0 @@
-# StockPortal
-Created with CodeSandbox
