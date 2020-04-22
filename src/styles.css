@@ -2,6 +2,16 @@
   font-family: sans-serif;
   text-align: center;
 }
+
 div #home {
   text-align: left;
+}
+
+/* Navigation/menu top bar */
+nav .nav-link {
+  color: white;
+}
+
+nav .nav-link:hover {
+  font-weight: bold;
 }

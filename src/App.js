@@ -3,26 +3,27 @@ import "./styles.css";
 // import { Navbar, Nav } from 'react-bootstrap';
 import Menu from "./components/Nav";
 import Home from "./pages/home";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Stocks from "./pages/stocks";
 // import Header from "./components/Header.jsx";
 // import {Nav, Navbar} from 'react-bootstrap/Navbar'
 
 export default function App() {
   return (
-    <div className="App">
-      <Menu />
-      <Home />
+    <Router>
+      <div className="App">
+        <Menu />
 
-      {/* //   <div className="App">
-  //     <Menu displaytext="First Component Data" />
-  //     <h1>Dividend Gods Stock Portal</h1>
-  //     <h4>Welcome to the Stock Analyst portal. </h4>
-  //     <div id="home">
-  //       Click on <a href="#stocks">Stocks</a> to see the available companies,{" "}
-  //       <a href="quote">Quote</a> to get the latest price information by stock
-  //       symbol, or choose <a href="price-history">Price History</a> to sample
-  //       from the most recent one hundred days of information for a particular
-  //       stock.
-  //     </div>} */}
-    </div>
+        <Switch>
+          <Route exact path="/">
+            <Home />
+          </Route>
+
+          <Route path="/stocks">
+            <Stocks />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }
