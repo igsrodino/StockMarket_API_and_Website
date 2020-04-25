@@ -4,6 +4,7 @@ import { Nav, Navbar } from "react-bootstrap";
 export default class Menu extends Component {
   render() {
     return (
+      <header>
       <nav className="navbar bg-dark navbar-dark">
         <Nav>
           <Navbar.Brand href="/">Dividend Gods</Navbar.Brand>
@@ -16,6 +17,7 @@ export default class Menu extends Component {
           <Nav.Link href="/login">Login</Nav.Link>
         </Nav>
       </nav>
+      </header>
     );
   }
 }
