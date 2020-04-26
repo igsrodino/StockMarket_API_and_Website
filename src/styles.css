@@ -15,3 +15,9 @@ nav .nav-link {
 nav .nav-link:hover {
   font-weight: bold;
 }
+
+.ag-theme-balham {
+  height: 300px;
+  width: 600px;
+  text-Align: left;
+}
