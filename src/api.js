@@ -10,24 +10,21 @@ export function Headline(props){
   )
 }
 
-export function useAPI() { 
+export function useAPI(search) { 
   const [loading, setLoading] = useState(true); 
   const [stockData, setHeadlines] = useState([]); 
   const [error, setError] = useState(null);
 
   useEffect(() => { 
-   getHeadlines()
+   getHeadlines(search)
     .then((stockData) => {
       setHeadlines(stockData); 
-      setLoading(false); 
-    }) 
-      .catch((e) => { 
+      setLoading(false);}) 
+    .catch((e) => { 
         setError(e); 
-        setLoading(false); 
+        setLoading(false);
       });
-     }, 
-     []
-     );
+    },[search]);
   return { 
     loading, 
     stockData, 
@@ -35,12 +32,11 @@ export function useAPI() {
   };
   }
 
-function getHeadlines() {
-  const url = 'http://131.181.190.87:3000/stocks/symbols';
+function getHeadlines(search) {
+  const url = `http://131.181.190.87:3000/stocks/&q${search}`;
 
   return fetch(url)
   .then((res) => res.json())
-  // .then((res) => res.articles)
   .then((res) =>
   res.map((data) => ({
     name: data.name,
@@ -49,3 +45,4 @@ function getHeadlines() {
   })),
   );
 }
+// https://github.com/jaredpalmer/formik
