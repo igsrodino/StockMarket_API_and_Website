@@ -6,12 +6,14 @@ import { Button, Badge } from "react-bootstrap";
 import { AgGridReact } from "ag-grid-react";
 import { useState, useEffect } from "react";
 
+const API_URL = 'http://131.181.190.87:3000'
+const url = `${API_URL}/stocks/symbols`
 
 export default function StocksApp(search){
-  const [rowData, setRowData] = useState([]);
+const [rowData, setRowData] = useState([]);
 
   useEffect(() => {
-    fetch("http://131.181.190.87:3000/stocks/symbols")
+    fetch(url)
       .then(res => res.json())
       .then(data => data.map(data => {
           return {

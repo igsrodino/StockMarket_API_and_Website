@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 // const API_KEY = '06d97fb9855a4e29a386e3869229d4ed'
 
 
-export function Headline(props){
+export function Results(props){
   return(
     <div>{props.name + '; Symbol:' + props.symbol + '; Industry:' + props.industry}</div>
   )
@@ -12,13 +12,13 @@ export function Headline(props){
 
 export function useAPI(search) { 
   const [loading, setLoading] = useState(true); 
-  const [stockData, setHeadlines] = useState([]); 
+  const [stockData, setResults] = useState([]); 
   const [error, setError] = useState(null);
 
   useEffect(() => { 
-   getHeadlines(search)
+   getResults(search)
     .then((stockData) => {
-      setHeadlines(stockData); 
+      setResults(stockData); 
       setLoading(false);}) 
     .catch((e) => { 
         setError(e); 
@@ -32,13 +32,13 @@ export function useAPI(search) {
   };
   }
 
-function getHeadlines(search) {
-  const url = `http://131.181.190.87:3000/stocks/&q${search}`;
+function getResults() {
+  const url = `http://131.181.190.87:3000/stocks/symbols`;
 
   return fetch(url)
   .then((res) => res.json())
-  .then((res) =>
-  res.map((data) => ({
+  .then((data) =>
+  data.map((data) => ({
     name: data.name,
     symbol: data.symbol,
     industry: data.industry,

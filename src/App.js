@@ -3,15 +3,14 @@ import "./styles.css";
 import Menu from "./components/Nav";
 import Home from "./pages/home";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import StocksApp from "./pages/stocks";
 import Stocks from "./pages/stocks";
-import { useAPI, Headline } from "./api";
+import { useAPI, Results } from "./api";
 import { useState } from "react";
 // import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham-dark.css";
 // import { Badge } from "react-bootstrap";
-
+import {Login} from "./pages/login";
 
 
 function SearchBar(props) {
@@ -54,10 +53,13 @@ export default function App(search) {
             <SearchBar />
             <p></p>
             {stockData.map(stocks => (
-            <Headline name={stocks.name} symbol={stocks.symbol} industry={stocks.industry} />))}
+            <Results name={stocks.name} symbol={stocks.symbol} industry={stocks.industry} />))}
           </Route>
             <Route path="/stocks">
               <Stocks />
+            </Route>
+            <Route path="/login">
+              <Login />
             </Route>
         </Switch>
       </div>
