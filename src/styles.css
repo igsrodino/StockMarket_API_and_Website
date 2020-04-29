@@ -3,8 +3,11 @@
   text-align: center;
 }
 
-div #home {
+#home {
   text-align: left;
+  padding-inline: 150px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 /* Navigation/menu top bar */
@@ -20,4 +23,5 @@ nav .nav-link:hover {
   height: 780px;
   width: 600px;
   text-Align: left;
+  margin: 0 auto;
 }

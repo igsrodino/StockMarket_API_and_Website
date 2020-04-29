@@ -15,6 +15,7 @@ const [rowData, setRowData] = useState([]);
   useEffect(() => {
     fetch(url)
       .then(res => res.json())
+      
       .then(data => data.map(data => {
           return {
             name: data.name,
@@ -23,7 +24,9 @@ const [rowData, setRowData] = useState([]);
           };
         })
       )
-      .then(data => setRowData(data));
+      .then(data => setRowData(data))
+      .catch(error => alert(error));
+      
   }, [search]);
 
   const columns = [

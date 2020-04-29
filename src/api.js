@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 
 // const API_KEY = '06d97fb9855a4e29a386e3869229d4ed'
-
+const API_URL = 'http://131.181.190.87:3000'
 
 export function Results(props){
   return(
@@ -20,8 +20,8 @@ export function useAPI(search) {
     .then((stockData) => {
       setResults(stockData); 
       setLoading(false);}) 
-    .catch((e) => { 
-        setError(e); 
+    .catch((error) => { 
+        setError(error); 
         setLoading(false);
       });
     },[search]);
@@ -33,7 +33,7 @@ export function useAPI(search) {
   }
 
 function getResults() {
-  const url = `http://131.181.190.87:3000/stocks/symbols`;
+  const url = `${API_URL}/stocks/symbols`;
 
   return fetch(url)
   .then((res) => res.json())
@@ -43,6 +43,7 @@ function getResults() {
     symbol: data.symbol,
     industry: data.industry,
   })),
-  );
+  )
+  .catch(error => alert(error));
 }
 // https://github.com/jaredpalmer/formik
