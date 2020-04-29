@@ -14,10 +14,15 @@ const [rowData, setRowData] = useState([]);
 
   useEffect(() => {
     fetch(url)
-      .then(res => res.json())
+      .then(res => {
+        if (res.status === 404){
+          throw "404"
+        }
+        return res.json() })
       
       .then(data => data.map(data => {
-          return {
+          
+        return {
             name: data.name,
             symbol: data.symbol,
             industry: data.industry,

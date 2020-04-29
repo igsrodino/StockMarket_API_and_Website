@@ -11,10 +11,15 @@ import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham-dark.css";
 // import { Badge } from "react-bootstrap";
 import {Login} from "./pages/login";
+import "ag-grid-community/dist/styles/ag-grid.css";
+import "ag-grid-community/dist/styles/ag-theme-balham.css";
+
+import { AgGridReact } from "ag-grid-react";
 
 
 function SearchBar(props) {
   const[innerSearch, setInnerSearch] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
   return(
   <div>
     <input 
@@ -27,8 +32,24 @@ function SearchBar(props) {
     }/>
     <button id="search-button"
       type="button"onClick={
-      () => props.onSubmit(innerSearch)}>Search
+      () => setSearchResults(props.stocks.filter(stockel => 
+        stockel.industry.includes(innerSearch)))}>Search
     </button>
+   {searchResults.length > 0 ? (<div className="ag-theme-balham-dark" style={{rowHeight: "500px"}}>
+        <AgGridReact
+          columnDefs= {[
+              { headerName: "Name", field: "name", resizable: true , sortable:true, filter:true},
+              { headerName: "Symbol", field: "symbol", resizable: true, sortable:true, filter:true },
+              { headerName: "Industry", field: "industry", resizable: true, sortable:true, filter:true },
+              
+            ]}
+          rowData={searchResults}
+          pagination={true}
+          paginationPageSize={25} />
+          </div>)
+          : ('')
+        }
+   
     </div>
         );}
 
@@ -50,7 +71,7 @@ export default function App(search) {
          <Switch>
           <Route exact path="/">
             <Home />
-            <SearchBar />
+            <SearchBar stocks={stockData}/>
             <p></p>
             {stockData.map(stocks => (
             <Results name={stocks.name} symbol={stocks.symbol} industry={stocks.industry} />))}
