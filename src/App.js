@@ -2,66 +2,26 @@ import React from "react";
 import "./styles.css";
 import Menu from "./components/Nav";
 import Home from "./pages/home";
+import Quote from "./pages/quote";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Stocks from "./pages/stocks";
-import { useAPI, Results } from "./api";
-import { useState } from "react";
-// import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham-dark.css";
-// import { Badge } from "react-bootstrap";
-import {Login} from "./pages/login";
-import "ag-grid-community/dist/styles/ag-grid.css";
-import "ag-grid-community/dist/styles/ag-theme-balham.css";
-
-import { AgGridReact } from "ag-grid-react";
+import { Login } from "./pages/login";
+import SearchByIndustry from "./views/SearchIndustry";
+import SearchBySymbol from "./views/SearchSymbol";
 
 
-function SearchBar(props) {
-  const[innerSearch, setInnerSearch] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  return(
-  <div>
-    <input 
-      aria-labelledby="search-button"
-      name="search"
-      id="search"
-      type="search"
-      value={innerSearch}onChange={
-      (e)=>setInnerSearch(e.target.value)
-    }/>
-    <button id="search-button"
-      type="button"onClick={
-      () => setSearchResults(props.stocks.filter(stockel => 
-        stockel.industry.includes(innerSearch)))}>Search
-    </button>
-   {searchResults.length > 0 ? (<div className="ag-theme-balham-dark" style={{rowHeight: "500px"}}>
-        <AgGridReact
-          columnDefs= {[
-              { headerName: "Name", field: "name", resizable: true , sortable:true, filter:true},
-              { headerName: "Symbol", field: "symbol", resizable: true, sortable:true, filter:true },
-              { headerName: "Industry", field: "industry", resizable: true, sortable:true, filter:true },
-              
-            ]}
-          rowData={searchResults}
-          pagination={true}
-          paginationPageSize={25} />
-          </div>)
-          : ('')
-        }
-   
-    </div>
-        );}
 
 export default function App(search) {
 
-  const { loading, stockData, error } = useAPI(search);
-  if (loading) {
-    return <p>Loading site...</p>;
-  }
-  if (error) {
-    return <p>Something went wrong: {error.message}</p>;
-  }
+  // // const { loading, stockData, error } = useAPI(search);
+  // if (loading) {
+  //   return <p>Loading site...</p>;
+  // }
+  // if (error) {
+  //   return <p>Something went wrong: {error.message}</p>;
+  // }
   return (
     
   
@@ -71,16 +31,22 @@ export default function App(search) {
          <Switch>
           <Route exact path="/">
             <Home />
-            <SearchBar stocks={stockData}/>
+            
+            <SearchByIndustry />
             <p></p>
-            {stockData.map(stocks => (
-            <Results name={stocks.name} symbol={stocks.symbol} industry={stocks.industry} />))}
+            {/* {stockData.map(stocks => (
+            <Results name={stocks.name} symbol={stocks.symbol} industry={stocks.industry} />))}*/}
           </Route>
             <Route path="/stocks">
               <Stocks />
             </Route>
+            <Route path="/quote">
+              <Quote />
+              <SearchBySymbol />
+            </Route>
             <Route path="/login">
               <Login />
+             
             </Route>
         </Switch>
       </div>
