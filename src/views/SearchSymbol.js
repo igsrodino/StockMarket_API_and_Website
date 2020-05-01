@@ -1,9 +1,9 @@
 import  React, { useState } from "react";
-import SearchSymbolsTable from "../components/SearchSymbolTable";
+import SearchSymbolTable from "../components/SearchSymbolTable";
 
 export default function SearchBySymbol() {
     const[searchTerm, setSearchTerm] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
+    const [searchResults, setSearchResults] = useState('');
  
     return(
     <div>
@@ -23,17 +23,17 @@ export default function SearchBySymbol() {
           }
           return res.json() })
         
-        .then(data => setSearchResults(data)
+        .then(data => setSearchResults([data])
  
         )
       
         .catch(error => alert(error));
-        }
+    }
         }>Search By Symbol</button> 
         
      {searchResults.length > 0 ? (
-     <div className="ag-theme-balham-dark">
-      <SearchSymbolsTable searchResults={searchResults} />
+     <div id="symbolSearch" className="ag-theme-balham-dark">
+      <SearchSymbolTable searchResults={searchResults} />
       </div>)
             : ('')
           }

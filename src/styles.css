@@ -25,3 +25,7 @@ nav .nav-link:hover {
   text-Align: left;
   margin: 0 auto;
 }
+#symbolSearch {
+  width: 1800px;
+  height: 63px;
+}
