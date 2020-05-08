@@ -2,14 +2,21 @@ import React from "react";
 import "./styles.css";
 import Menu from "./components/Nav";
 import Home from "./pages/home";
-import Quote from "./pages/quote";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Stocks from "./pages/stocks";
+import Quote from "./pages/quote";
+import PriceHistory from "./pages/pricehistory";
+import { Login } from "./pages/login";
+import { Register } from "./pages/register";
+
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham-dark.css";
-import { Login } from "./pages/login";
+
 import SearchByIndustry from "./views/SearchIndustry";
 import SearchBySymbol from "./views/SearchSymbol";
+import SearchTimeframe from "./views/SearchTimeframe";
+
 
 
 
@@ -33,9 +40,7 @@ export default function App(search) {
             <Home />
             
             <SearchByIndustry />
-            <p></p>
-            {/* {stockData.map(stocks => (
-            <Results name={stocks.name} symbol={stocks.symbol} industry={stocks.industry} />))}*/}
+      
           </Route>
             <Route path="/stocks">
               <Stocks />
@@ -44,9 +49,15 @@ export default function App(search) {
               <Quote />
               <SearchBySymbol />
             </Route>
+            <Route path="/pricehistory">
+              <PriceHistory />
+              <SearchTimeframe />
+            </Route>
             <Route path="/login">
               <Login />
-             
+            </Route>
+            <Route path="/register">
+              <Register />
             </Route>
         </Switch>
       </div>

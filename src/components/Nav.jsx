@@ -10,7 +10,7 @@ export default class Menu extends Component {
           <Navbar.Brand href="/">Dividend Gods</Navbar.Brand>
           <Nav.Link href="/stocks">Stocks</Nav.Link>
           <Nav.Link href="/quote">Quote</Nav.Link>
-          <Nav.Link href="/price-history">Price History</Nav.Link>
+          <Nav.Link href="/pricehistory">Price History</Nav.Link>
         </Nav>
         <Nav>
           <Nav.Link href="/register">Register</Nav.Link>
