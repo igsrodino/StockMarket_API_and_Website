@@ -1,32 +1,41 @@
-import React from "react";
-
-const API_URL = 'http://131.181.190.87:3000'
+import React, { useState } from "react";
 
 export function Login() {
-    function login() {
-        const url = `${API_URL}/user/login`
+const API_URL = 'http://131.181.190.87:3000'
+const url = `${API_URL}/user/login`
+const [email, setEmail]= useState('');
+const [password, setPassword]= useState('');
 
-        return fetch(url, {
-            method: "POST",
-            headers: {accept: "application/json", "Content-Type": "application/json"},
-            body: JSON.stringify({email: "example@api.com", password: "asdlkfj1"})
+function login() {
 
-        })
-        .then((res) => res.json())
-        // .then((res) => console.log(res))
+    return fetch(url, {
+        method: "POST",
+        headers: {accept: "application/json", "Content-Type": "application/json"},
+        body: JSON.stringify({email:`${email}`, password:`${password}`})
+    })
+        .then(res => {
+            if (res.status === 401){
+                alert("Incorrect password")
+            }
+            return res.json() })
         .then((res) => {localStorage.setItem("token", res.token)})}
 
-    
-    return (
-        <div class="container">
-            <h1> Login</h1>
-            
-            <label for="email"><b>Email</b></label>
-            <input type="text" placeholder="Enter Email" name="email" required/>
 
-            <label for="password"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="password" required/>
+    return (
+        <div className="container">
+            <h1>Login</h1>
+            
+            <label htmlFor="email"><b>Email</b></label>
+            <input type="text" placeholder="Enter Email" name="email" required value={email}onChange={
+            (e)=>setEmail(e.target.value)}/>
+
+            <label htmlFor="password"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="password" required value={password}onChange={
+            (e)=>setPassword(e.target.value)}/>
+            
             <button onClick={login}>Login</button>
         </div>
-    )
-}
+        )
+    }
+    
+    
