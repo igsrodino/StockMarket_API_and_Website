@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import { Nav, Navbar } from "react-bootstrap";
 
+const token = localStorage.getItem("token");
 export default class Menu extends Component {
+  
   render() {
+    
     return (
       <header>
       <nav className="navbar bg-dark navbar-dark">
@@ -13,8 +16,11 @@ export default class Menu extends Component {
           <Nav.Link href="/pricehistory">Price History</Nav.Link>
         </Nav>
         <Nav>
-          <Nav.Link href="/register">Register</Nav.Link>
-          <Nav.Link href="/login">Login</Nav.Link>
+          {!token ? (
+          <><Nav.Link href="/register">Register</Nav.Link>
+            <Nav.Link href="/login">Login</Nav.Link></>)
+            : (
+          <><Nav.Link href="/logout">Logout</Nav.Link></>)}
         </Nav>
       </nav>
       </header>

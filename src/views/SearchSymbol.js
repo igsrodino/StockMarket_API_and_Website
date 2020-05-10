@@ -19,15 +19,21 @@ export default function SearchBySymbol() {
         {fetch(`http://131.181.190.87:3000/stocks/${searchTerm}`)
         .then(res => {
           if (res.status === 404){
-            //throw "404"
+            alert("Stock symbol entered not found")
+            throw new Error(404)
           }
+          if (res.status === 400){
+            alert("Stock symbol must be 1-5 capital letters")
+            throw new Error(400)
+          }
+          
           return res.json() })
         
         .then(data => setSearchResults([data])
  
         )
       
-        .catch(error => alert(error));
+        .catch(Error);
     }
         }>Search By Symbol</button> 
         

@@ -1,10 +1,13 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+
 
 export function Login() {
 const API_URL = 'http://131.181.190.87:3000'
 const url = `${API_URL}/user/login`
 const [email, setEmail]= useState('');
 const [password, setPassword]= useState('');
+const history = useHistory();
 
 function login() {
 
@@ -14,11 +17,19 @@ function login() {
         body: JSON.stringify({email:`${email}`, password:`${password}`})
     })
         .then(res => {
+            if (res.status === 200){
+                alert("Success! Welcome back!")
+                history.push("/")
+                //localStorage.setItem("token", res.token)}
+            }
             if (res.status === 401){
                 alert("Incorrect password")
             }
+            
             return res.json() })
-        .then((res) => {localStorage.setItem("token", res.token)})}
+        .then((res) => {
+            localStorage.setItem("token", res.token)})}
+            //history.push("/"))}
 
 
     return (

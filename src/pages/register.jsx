@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 
 export function Register() {
@@ -6,6 +7,7 @@ const API_URL = 'http://131.181.190.87:3000'
 const url = `${API_URL}/user/register`
 const [email, setEmail]= useState('');
 const [password, setPassword]= useState('');
+const history = useHistory();
 
 function register() {
     
@@ -15,16 +17,31 @@ function register() {
         body: JSON.stringify({email:`${email}`, password:`${password}`})
     })
         .then(res => {
-            if (res.status === 409){
-                alert("User already exists")
-            }
-            return res.json() })
-        .then((res) => {localStorage.setItem("token", res.token)})}
+            if (res.status === 201){
+                alert("Success! Account registered!")
+                history.push("/")}
 
+            if (res.status === 400){
+                alert("Both email and password required")
+                history.push("/register")
+                throw new Error(400)}
+
+            if (res.status === 409){
+                alert("User already exists, please log in instead")
+                history.push("/login")
+                throw new Error(401)
+            }
+
+
+            
+            return res.json() })
+        
+            
+        .catch(Error)}
     
     return (
         <div className="container">
-            <h1> Register</h1>
+            <h1>Register</h1>
             
             <label htmlFor="email"><b>Email</b></label>
             <input type="text" placeholder="Enter Email" name="email" required value={email}onChange={
@@ -35,6 +52,8 @@ function register() {
             (e)=>setPassword(e.target.value)}/>
 
             <button onClick={register}>Register</button>
+
+            
         </div>
         )
     }

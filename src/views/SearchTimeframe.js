@@ -1,5 +1,5 @@
 import  React, { useState } from "react";
-import SearchSymbolTable from "../components/SearchSymbolTable";
+import SearchTimeFrameTable from "../components/SearchTimeFrameTable";
 
 export default function SearchBySymbol() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -46,26 +46,31 @@ export default function SearchBySymbol() {
        onClick={()=>
         {fetch(`http://131.181.190.87:3000/stocks/authed/${searchTerm}?from=${startDate}&to=${endDate}`, {headers})
         .then(res => {
+          if (res.status === 400){
+            alert("You must select dates for both from and to, as well as have a correct stock symbol entered")
+            throw new Error(400)
+          }
+          if (res.status === 403){
+            alert("You must be logged in to view price history")
+            throw new Error(403)
+          }
           if (res.status === 404){
-            //throw "404"
+            alert("No entries available for stock with supplied date range")
+            throw new Error(404)
           }
           return res.json() })
         
-        .then(data => {
-          for(var k in data) {
-          var data2 = [(k, data[k])];
-          console.log(data2)
-        } return setSearchResults(data)
+        .then(data => setSearchResults(data)
         
-          })
+          )
         
-        .catch(error => alert(error));
+        .catch(Error);
     }
         }>Search By Symbol</button> 
         
      {searchResults.length > 0 ? (
      <div id="timeframeSearch" className="ag-theme-balham-dark">
-      <SearchSymbolTable searchResults={searchResults} />
+      <SearchTimeFrameTable searchResults={searchResults} />
       </div>)
             : ('')
           }

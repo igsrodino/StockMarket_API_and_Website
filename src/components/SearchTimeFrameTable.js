@@ -1,10 +1,14 @@
 import { AgGridReact } from "ag-grid-react";
 import React from "react";
 
-export default function SearchSymbolsTable(props){
+
+export default function SearchTimeFrameTable(props){
 
 const columns = [
-    { headerName: "Timestamp", field: "timestamp", resizable: true },
+    { headerName: "Timestamp", field: "timestamp", resizable: true, cellRenderer: 
+    (data) => {
+        return data.value ? (new Date(data.value)).toLocaleDateString() : '';
+   } },
     { headerName: "Symbol", field: "symbol", resizable: true},
     { headerName: "Name", field: "name", resizable: true },
     { headerName: "Industry", field: "industry", resizable: true },
@@ -19,6 +23,6 @@ return(
     <AgGridReact
         columnDefs={columns}
         rowData={props.searchResults}
-        
-         />
+        pagination={true}
+        paginationPageSize={25}/>
 )}
