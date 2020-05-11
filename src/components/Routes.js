@@ -42,7 +42,7 @@ export default function Routes(){
                 <Register />
             </Route>
             <Route path="/logout">
-                <Logout />
+                <Logout path="/"/>
             </Route>
         </Switch>
         </div>

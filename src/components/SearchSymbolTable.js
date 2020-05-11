@@ -1,8 +1,8 @@
 import { AgGridReact } from "ag-grid-react";
 import React from "react";
-
+//import { useHistory } from "react-router-dom";
 export default function SearchSymbolsTable(props){
-
+//const history = useHistory();
 const columns = [
     { headerName: "Timestamp", field: "timestamp", resizable: true },
     { headerName: "Symbol", field: "symbol", resizable: true},
@@ -19,6 +19,6 @@ return(
     <AgGridReact
         columnDefs={columns}
         rowData={props.searchResults}
-        
+        //onRowClicked={row => history.push(`/pricehistory/`)}
          />
 )}

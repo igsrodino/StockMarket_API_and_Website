@@ -1,5 +1,6 @@
 import  React, { useState } from "react";
 import SearchTimeFrameTable from "../components/SearchTimeFrameTable";
+ import LineExample from "./../components/Chart";
 
 export default function SearchBySymbol() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -63,7 +64,16 @@ export default function SearchBySymbol() {
         .then(data => setSearchResults(data)
         
           )
-        
+          .then(data => data.map(data => {
+          
+            return {
+                name: data.name,
+                symbol: data.symbol,
+                close: data.close,
+              };
+            })
+          )
+          
         .catch(Error);
     }
         }>Search By Symbol</button> 
@@ -74,6 +84,6 @@ export default function SearchBySymbol() {
       </div>)
             : ('')
           }
-     
+      <LineExample />
       </div>
           )}

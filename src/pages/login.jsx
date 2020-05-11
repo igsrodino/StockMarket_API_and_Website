@@ -20,7 +20,7 @@ function login() {
             if (res.status === 200){
                 alert("Success! Welcome back!")
                 history.push("/")
-                //localStorage.setItem("token", res.token)}
+                
             }
             if (res.status === 401){
                 alert("Incorrect password")
@@ -29,7 +29,7 @@ function login() {
             return res.json() })
         .then((res) => {
             localStorage.setItem("token", res.token)})}
-            //history.push("/"))}
+            
 
 
     return (

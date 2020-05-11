@@ -1,5 +1,5 @@
 import  React, { useState } from "react";
-import SearchTable from "../components/SearchResultsTable";
+import SearchTable from "../components/SearchIndustryTable";
 
 export default function SearchByIndustry() {
     const[searchTerm, setSearchTerm] = useState('');
@@ -47,8 +47,10 @@ export default function SearchByIndustry() {
         }>Search By Industry</button> 
         
      {searchResults.length > 0 ? (
+
      <div className="ag-theme-balham-dark">
       <SearchTable searchResults={searchResults} />
+      <p>Industries</p>
       </div>)
             : ('')
           }

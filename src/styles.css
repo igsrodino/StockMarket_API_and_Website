@@ -3,11 +3,30 @@
   text-align: center;
 }
 
+body {
+  background: url("./images/stockmarketbackground.jpg")
+  no-repeat center center fixed;
+  
+  background-size: cover;
+}
+
+
+h1{
+  padding-top:50px;
+}
+
 #home {
-  text-align: left;
   padding-inline: 150px;
   padding-top: 20px;
-  padding-bottom: 20px;
+  padding-bottom: 30px;
+  padding-top:100px;
+  font-weight:bold;
+}
+a:link {
+  color: white;
+}
+div #chart{
+  padding-top:200px;
 }
 
 /* Navigation/menu top bar */
@@ -29,3 +48,6 @@ nav .nav-link:hover {
   width: 1812px;
   height: 70px;
 }
+/* #dropdownBar{
+  padding-left:200px;
+} */

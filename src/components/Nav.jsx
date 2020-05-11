@@ -11,8 +11,8 @@ export default class Menu extends Component {
       <nav className="navbar bg-dark navbar-dark">
         <Nav>
           <Navbar.Brand href="/">Dividend Gods</Navbar.Brand>
-          <Nav.Link href="/stocks">Stocks</Nav.Link>
-          <Nav.Link href="/quote">Quote</Nav.Link>
+          <Nav.Link href="/stocks">All Stocks</Nav.Link>
+          <Nav.Link href="/quote">Price Quote</Nav.Link>
           <Nav.Link href="/pricehistory">Price History</Nav.Link>
         </Nav>
         <Nav>

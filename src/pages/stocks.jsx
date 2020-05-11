@@ -1,8 +1,7 @@
 import React ,{ useState, useEffect } from "react";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
-import { Badge } from "react-bootstrap";
-import SearchTable from "../components/SearchResultsTable";
+import SearchTable from "../components/SearchIndustryTable";
 
 const API_URL = 'http://131.181.190.87:3000'
 const url = `${API_URL}/stocks/symbols`
@@ -34,7 +33,7 @@ const [rowData, setRowData] = useState([]);
       <div className="container">
       <p></p>
       <h1>Stocks List</h1>
-      <p><Badge color="success">{rowData.length}</Badge> Stocks loaded</p>
+      <p>{rowData.length} Stocks loaded</p>
       <div className="ag-theme-balham-dark" style={{rowHeight: "500px"}}>
       <SearchTable searchResults={rowData} />
       </div>
