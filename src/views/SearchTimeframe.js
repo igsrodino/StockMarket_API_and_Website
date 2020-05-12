@@ -48,15 +48,15 @@ export default function SearchBySymbol() {
         {fetch(`http://131.181.190.87:3000/stocks/authed/${searchTerm}?from=${startDate}&to=${endDate}`, {headers})
         .then(res => {
           if (res.status === 400){
-            alert("You must select dates for both from and to, as well as have a correct stock symbol entered")
+            alert("You must either select a from or to date range, or both. As well as have a correct stock symbol entered")
             throw new Error(400)
           }
           if (res.status === 403){
-            alert("You must be logged in to view price history")
+            alert("You must be logged in to view price history.")
             throw new Error(403)
           }
           if (res.status === 404){
-            alert("No entries available for stock with supplied date range")
+            alert("No entries available for stock with supplied date range.")
             throw new Error(404)
           }
           return res.json() })

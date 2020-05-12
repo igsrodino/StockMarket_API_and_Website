@@ -6,7 +6,6 @@
 body {
   background: url("./images/stockmarketbackground.jpg")
   no-repeat center center fixed;
-  
   background-size: cover;
 }
 
@@ -22,14 +21,15 @@ h1{
   padding-top:100px;
   font-weight:bold;
 }
+
 a:link {
   color: white;
 }
+
 div #chart{
   padding-top:200px;
 }
 
-/* Navigation/menu top bar */
 nav .nav-link {
   color: white;
 }
@@ -44,10 +44,27 @@ nav .nav-link:hover {
   text-Align: left;
   margin: 0 auto;
 }
+
 #symbolSearch {
   width: 1812px;
   height: 70px;
 }
-/* #dropdownBar{
-  padding-left:200px;
-} */
+#search-button {
+  transition-duration: 0.5s;
+}
+
+#search-button:hover {
+  background-color: rgb(0, 0, 0); 
+  color: white;
+}
+
+#logoImage{
+  width:30px;
+  height:30px;
+}
+
+#chart {
+  height: 100%;
+  width: 60%;
+  margin: 0 auto;
+}

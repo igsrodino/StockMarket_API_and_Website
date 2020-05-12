@@ -4,8 +4,8 @@ export default class Home extends Component {
   render() {
     return (
       <div className="Home">
-        <h1>Dividend Gods Stock Portal</h1>
-        <h4>Welcome to the Stock Analyst portal. </h4>
+        <h1>Stock Portal</h1>
+        <h4>Welcome to the Stock Analyst Portal.</h4>
         
         <div id="home">
           <p>Click on <a href="#stocks">Stocks</a> to see all available companies</p>

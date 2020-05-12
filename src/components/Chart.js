@@ -9,11 +9,11 @@ const data = {
       label: 'Stock Symbol Chart',
       fill: true,
       lineTension: 0.1,
-      backgroundColor: 'rgba(255,255,255, 0.9)',
-      borderColor: 'rgba(75,192,192,1)',
+      backgroundColor: 'lightgrey',
+      borderColor: 'black',
       borderCapStyle: 'butt',
       borderDash: [1],
-      pointBackgroundColor: '#000',
+      pointBackgroundColor: 'black',
       pointBorderWidth: 1,
       pointHoverRadius: 2,
       pointHoverBackgroundColor: 'rgba(75,192,192,1)',
@@ -24,11 +24,7 @@ const data = {
     }
   ]
 };
-
-
  
-
-  
     return (
       <div id="chart">
         <h2>Stock Price Chart</h2>

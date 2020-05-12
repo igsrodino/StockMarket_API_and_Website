@@ -1,19 +1,13 @@
+import { useHistory } from "react-router-dom";
 
-import React from "react";
-import { BrowserRouter as Redirect } from "react-router-dom";
 
 export default function Logout() {
 
+const history = useHistory()
+window.localStorage.clear()
+alert("You have successfully logged out.")
+history.push("/")
 
-
-    return (
-        window.localStorage.clear(),
-        alert("You have successfully logged out."),
-        <Redirect path="/"/>
-
-    )
-        
+    return (null)
     }
-    
-    
-
+     

@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 
 
 export function Login() {
+    
 const API_URL = 'http://131.181.190.87:3000'
 const url = `${API_URL}/user/login`
 const [email, setEmail]= useState('');
@@ -18,8 +19,10 @@ function login() {
     })
         .then(res => {
             if (res.status === 200){
+                
                 alert("Success! Welcome back!")
                 history.push("/")
+                window.location.reload()
                 
             }
             if (res.status === 401){
@@ -44,7 +47,7 @@ function login() {
             <input type="password" placeholder="Enter Password" name="password" required value={password}onChange={
             (e)=>setPassword(e.target.value)}/>
             
-            <button onClick={login}>Login</button>
+            <button id="search-button" onClick={login}>Login</button>
         </div>
         )
     }

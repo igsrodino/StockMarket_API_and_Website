@@ -18,8 +18,8 @@ function register() {
     })
         .then(res => {
             if (res.status === 201){
-                alert("Success! Account registered!")
-                history.push("/")}
+                alert("Success! Account registered! Please log in to access account.")
+                history.push("/login")}
 
             if (res.status === 400){
                 alert("Both email and password required")
@@ -32,11 +32,8 @@ function register() {
                 throw new Error(401)
             }
 
-
-            
             return res.json() })
         
-            
         .catch(Error)}
     
     return (
@@ -51,9 +48,7 @@ function register() {
             <input type="password" placeholder="Enter Password" name="password" required value={password}onChange={
             (e)=>setPassword(e.target.value)}/>
 
-            <button onClick={register}>Register</button>
-
-            
+            <button id="search-button" onClick={register}>Register</button>
         </div>
         )
     }
