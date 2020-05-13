@@ -1,12 +1,14 @@
 import { AgGridReact } from "ag-grid-react";
 import React from "react";
 
+
+// Designs template for all stocks and industry table
 export default function SearchTable(props){
     
 const columns = [
-    { headerName: "Name", field: "name", resizable: true , sortable:true, filter:true},
-    { headerName: "Symbol", field: "symbol", resizable: true, sortable:true, filter:true },
-    { headerName: "Industry", field: "industry", resizable: true, sortable:true, filter:true },
+    { headerName: "Name", field: "name", sortable:true, filter:true },
+    { headerName: "Symbol", field: "symbol", sortable:true, filter:true },
+    { headerName: "Industry", field: "industry", sortable:true, filter:true },
     
     ];
 return(

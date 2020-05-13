@@ -1,7 +1,8 @@
 import  React, { useState } from "react";
 import SearchTimeFrameTable from "../components/SearchTimeFrameTable";
- import LineExample from "./../components/Chart";
+import LineChart from "./../components/Chart";
 
+// Function to search stock by symbol and dates using API and display using table component.
 export default function SearchBySymbol() {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState('');
@@ -16,18 +17,22 @@ export default function SearchBySymbol() {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     };
-    // console.log(headers);
+
 
     return(
     <div>
+      <h5><b>Search desired stocks by symbol and date:</b></h5>
+      <br></br>
       <input 
         aria-labelledby="search-button"
         name="search"
+        placeholder="Enter Stock Symbol"
         id="search"
         type="search"
         value={searchTerm}onChange={
         (e)=>setSearchTerm(e.target.value)
       }/>
+
       <input 
         type="date" 
         id="startDate" 
@@ -35,6 +40,7 @@ export default function SearchBySymbol() {
           (e)=>setStartDate(e.target.value)
         }
       />
+
       <input 
         type="date" 
         id="endDate" 
@@ -48,7 +54,7 @@ export default function SearchBySymbol() {
         {fetch(`http://131.181.190.87:3000/stocks/authed/${searchTerm}?from=${startDate}&to=${endDate}`, {headers})
         .then(res => {
           if (res.status === 400){
-            alert("You must either select a from or to date range, or both. As well as have a correct stock symbol entered")
+            alert("You must either select a from or to date range, or both. As well as have a correct stock symbol entered as 1-5 capital letters")
             throw new Error(400)
           }
           if (res.status === 403){
@@ -75,15 +81,17 @@ export default function SearchBySymbol() {
           )
           
         .catch(Error);
-    }
+        }
+
         }>Search By Symbol</button> 
         
-     {searchResults.length > 0 ? (
-     <div id="timeframeSearch" className="ag-theme-balham-dark">
-      <SearchTimeFrameTable searchResults={searchResults} />
-      </div>)
+        {/* If there are any results, display table */}
+        {searchResults.length > 0 ? (
+        <div id="timeframeSearch" className="ag-theme-balham-dark">
+          <SearchTimeFrameTable searchResults={searchResults} />
+        </div>)
             : ('')
           }
-      <LineExample />
-      </div>
+      <LineChart />
+    </div>
           )}

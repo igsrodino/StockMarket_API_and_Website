@@ -1,34 +1,32 @@
 import  React, { useState } from "react";
 import SearchTable from "../components/SearchIndustryTable";
 
+
+// Function to search stock by industry using API and display using table component.
 export default function SearchByIndustry() {
     const[searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
-    // const industries = [
-    //   {label: "Health Care", value: "Health Care"},
-    //   {label: "Financials", value: "Financials"},
-    //   {label: "Industrials", value: "Industrials"},
-    //   {label: "Real Estate", value: "Real Estate"},
-    //   {label: "Consumer Discretionary", value: "Consumer Discretionary"},
-    //   {label: "Materials", value: "Materials"},
-    //   {label: "Information Technology", value: "Information Technology"},
-    //   {label: "Energy", value: "Energy"},
-    //   {label: "Consumer Staples", value: "Consumer Staples"},
-    //   {label: "Telecommunication Services", value: "Telecommunication Services"},
-    //   {label: "Utilities", value: "Utilities"}
 
-
-    // ]
     return(
     <div>
+      <div id="homeIndustry">
+          <h5><b>Search desired stocks by industry:</b></h5>
+          <h6><b><i>Available Industries</i></b></h6>
+          <p>Health Care, Financials, Industrials, Real Estate, Consumer Discretionary,
+            Materials, Information Technology, Energy, Consumer Staples, Telecommunication 
+            Services and Utilities</p>
+      </div>
+
       <input 
         aria-labelledby="search-button"
         name="search"
         id="search"
+        placeholder="Enter Industry"
         type="search"
         value={searchTerm}onChange={
         (e)=>setSearchTerm(e.target.value)
       }/>
+
       <button id="search-button" type="button" onClick={()=>
         {fetch(`http://131.181.190.87:3000/stocks/symbols?industry=${searchTerm}`)
         .then(res => {
@@ -50,14 +48,13 @@ export default function SearchByIndustry() {
         }
         }>Search By Industry</button> 
         
-     {searchResults.length > 0 ? (
-
-     <div className="ag-theme-balham-dark">
-      <SearchTable searchResults={searchResults} />
-      <p>Industries</p>
-      </div>)
-            : ('')
-          }
-     
-      </div>
-          )}
+        {/* If there are any results, display table */}
+        {searchResults.length > 0 ? (
+        <div className="ag-theme-balham-dark">
+          <SearchTable searchResults={searchResults} />
+        </div>)
+                : ('')
+              }
+        
+    </div>
+              )}

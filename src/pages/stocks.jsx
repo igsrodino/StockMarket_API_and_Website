@@ -3,6 +3,8 @@ import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import SearchTable from "../components/SearchIndustryTable";
 
+
+// Load all stocks available page
 const API_URL = 'http://131.181.190.87:3000'
 const url = `${API_URL}/stocks/symbols`
 
@@ -13,7 +15,8 @@ const [rowData, setRowData] = useState([]);
     fetch(url)
       .then(res => {
         if (res.status === 404){
-          //throw "404"
+          alert("Error loading stocks")
+          throw new Error(400)
         }
         return res.json() })
       .then(data => data.map(data => {
@@ -26,17 +29,18 @@ const [rowData, setRowData] = useState([]);
         })
       )
       .then(data => setRowData(data))
-      .catch(error => alert(error));
+
+      .catch(Error);
   }, []);
 
     return (
       <div className="container">
-      <p></p>
-      <h1>Stocks List</h1>
-      <p>{rowData.length} Stocks loaded</p>
-      <div className="ag-theme-balham-dark" style={{rowHeight: "500px"}}>
-      <SearchTable searchResults={rowData} />
-      </div>
+        <p></p>
+        <h1><b>All Stocks</b></h1>
+        <p>Number of stocks loaded: {rowData.length} Stocks</p>
+        <div className="ag-theme-balham-dark" style={{rowHeight: "500px"}}>
+          <SearchTable searchResults={rowData} />
+        </div>
       </div>
     );
   }

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
 
+// Function to register user and create account to be able to retrieve JWT token upon logging in.
 export function Register() {
 const API_URL = 'http://131.181.190.87:3000'
 const url = `${API_URL}/user/register`
@@ -38,17 +39,23 @@ function register() {
     
     return (
         <div className="container">
-            <h1>Register</h1>
-            
+            <div>
+            <h1><b>Register</b></h1>
+            <br></br>
             <label htmlFor="email"><b>Email</b></label>
             <input type="text" placeholder="Enter Email" name="email" required value={email}onChange={
             (e)=>setEmail(e.target.value)}/>
-
-            <label htmlFor="password"><b>Password</b></label>
+            
+            <label htmlFor="password"><b>&emsp;Password</b></label>
             <input type="password" placeholder="Enter Password" name="password" required value={password}onChange={
             (e)=>setPassword(e.target.value)}/>
-
-            <button id="search-button" onClick={register}>Register</button>
+            <br></br>
+            <button id="search-button" class="btn btn-outline-dark btn-lg" onClick={register}>Register</button>
         </div>
+        <div id="registerlogin">
+        <h5><b>Already a member?</b></h5>
+        <a href="/login"><button type="button" class="btn btn-outline-dark btn-lg">Login</button></a>
+    </div>
+    </div>
         )
     }

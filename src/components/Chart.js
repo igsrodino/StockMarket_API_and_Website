@@ -1,7 +1,9 @@
 import React from 'react';
-import {Line} from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 
-export default function LineExample(){
+
+// Designs template for a chart
+export default function LineChart(){
 const data = {
   labels: ['15/04', '16/04', '17/04', '18/04', '19/04', '20/04', '21/04', '22/04', '23/04', '24/04'],
   datasets: [

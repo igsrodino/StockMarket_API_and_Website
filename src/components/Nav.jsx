@@ -1,7 +1,8 @@
 import React from "react";
 import { Nav } from "react-bootstrap";
 
-//const token = localStorage.getItem("token");
+
+// Navigation menu for all pages
 export default function Menu() {
   
 const token = localStorage.getItem("token");  
@@ -15,9 +16,11 @@ const token = localStorage.getItem("token");
           </a>
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/stocks">All Stocks</Nav.Link>
-            <Nav.Link href="/quote">Price Quote</Nav.Link>
+            <Nav.Link href="/quote">Filter Stocks</Nav.Link>
             <Nav.Link href="/pricehistory">Price History</Nav.Link>
           </Nav>
+          
+          {/* Toggle between register/login and logout in top right of menu */}
           <Nav>
             {!token ? (
             <><Nav.Link href="/register">Register</Nav.Link>

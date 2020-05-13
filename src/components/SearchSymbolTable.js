@@ -1,24 +1,28 @@
 import { AgGridReact } from "ag-grid-react";
 import React from "react";
-//import { useHistory } from "react-router-dom";
+
+
+// Designs template for search by symbol table
 export default function SearchSymbolsTable(props){
-//const history = useHistory();
+
 const columns = [
-    { headerName: "Timestamp", field: "timestamp", resizable: true },
-    { headerName: "Symbol", field: "symbol", resizable: true},
-    { headerName: "Name", field: "name", resizable: true },
-    { headerName: "Industry", field: "industry", resizable: true },
-    { headerName: "Open", field: "open", resizable: true },
-    { headerName: "High", field: "high", resizable: true },
-    { headerName: "Low", field: "low", resizable: true},
-    { headerName: "Close", field: "close", resizable: true},
-    { headerName: "Volume", field: "volumes", resizable: true },
+    { headerName: "Timestamp", field: "timestamp", cellRenderer: 
+    (data) => {
+        return data.value ? (new Date(data.value)).toLocaleDateString() : '';
+   }  },
+    { headerName: "Symbol", field: "symbol", sortable:true },
+    { headerName: "Name", field: "name", sortable:true },
+    { headerName: "Industry", field: "industry", sortable:true },
+    { headerName: "Open", field: "open", sortable:true },
+    { headerName: "High", field: "high", sortable:true },
+    { headerName: "Low", field: "low", sortable:true },
+    { headerName: "Close", field: "close", sortable:true },
+    { headerName: "Volume", field: "volumes", sortable:true },
     
     ];
 return(
     <AgGridReact
         columnDefs={columns}
         rowData={props.searchResults}
-        //onRowClicked={row => history.push(`/pricehistory/`)}
-         />
+    />
 )}
