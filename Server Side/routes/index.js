@@ -14,6 +14,12 @@ router.get('/', function(req, res, next) {
   next()
 });
 
+router.get('/knex', function(req,res,next) { 
+  req.db.raw("SELECT VERSION()").then( 
+    (version)  =>  console.log((version[0][0])) 
+    ).catch((err) =>  {console.log(err); throw err})
+    res.send("Version Logged successfully");
+  });   
 
 /* API page. */
 router.get('/api', function(req, res, next) {
@@ -22,63 +28,74 @@ router.get('/api', function(req, res, next) {
 
 /* All Stocks */
 router.get('/stocks/symbols', function(req, res){
-  var query = "SELECT DISTINCT name, symbol, industry FROM ?? ORDER BY symbol;";
-  var table = ["stocks"];
-  query =  mysql.format(query,table);
-  req.db.query(query,function(err, rows){
-    if(err) {
-      res.json({"Error":true, "Message":"Error executing MySQL query"});
-    }
-    else {
-      res.json(rows);
-    }
-  });
+  // var query = "SELECT DISTINCT name, symbol, industry FROM ?? ORDER BY symbol;";
+
+  req.db.from('stocks').distinct('name', 'symbol', 'industry').orderBy('symbol')
+  .then((rows) => {
+    res.json(rows)})
+    
+  .catch((err) => {
+    console.log(err);
+    res.json({"Error": true, "Message": "Error in  MySQL query"}) 
+  })
 }); 
 
 /* Search by Industry */
-router.get('/stocks/symbols?industry=', function(req, res){
-  var query = "SELECT DISTINCT name, symbol, industry FROM ?? ORDER BY symbol;";
-  var table = ["stocks"];
-  query =  mysql.format(query,table);
-  req.db.query(query,function(err, rows){
-    if(err) {
-      res.json({"Error":true, "Message":"Error executing MySQL query"});
-    }
-    else {
-      res.json(rows);
-    }
+router.get("/stocks/symbols", function(req, res, next){
+  //var query = "SELECT DISTINCT name, symbol, industry FROM stocks WHERE industry=param ORDER BY symbol;";
+  
+  req.db
+  .from('stocks')
+  .distinct('name', 'symbol', 'industry')
+  .where({industry: 'utilities'}) //THIS WORKS
+  .orderBy('symbol') // NOT NEEDED
+  // .where({industry: req.params.industry})
+    
+  .then((rows) => {
+    res.json(rows)})
+
+  .catch((err) => {
+    console.log(err);
+    res.json({"Error": true, "Message": "Error in  MySQL query"}) 
+    })
   });
-}); 
+  ; 
 
 /* Search by Symbol */
-// router.get('/api/stocks/{symbols}', function(req, res){
-//   var query = "SELECT * from ??";
-//   var table = ["stocks"];
-//   query =  mysql.format(query,table);
-//   req.db.query(query,function(err, rows){
-//     if(err) {
-//       res.json({ "Error":true, "Message":"Error executing MySQL query"});
-//     }
-//     else {
-//       res.json({"Error":false, "Message":"Success", 
-//       "name": rows});
-//     }
-//   });
-// });  
+router.get('/stocks/symbols', function(req, res){
+  const from = '2020-03-03';
+  const to = '2020-03-27';// JSON SHOWING 1 LESS DAY THAN SWAGGER QUT API
+  req.db.
+  from('stocks')
+  .select('*')
+  .where({symbol: 'AAL'})
+  .whereBetween('timestamp', [from, to]) //THIS WORKS (NEED TO ADD IF STATEMENTS FOR INCASE USER DOESN'T ENTER A FROM OR A TO DATE, SO IT STILL SHOWS DATA)
+  
+  .then((rows) => {
+    res.json(rows)})
+
+  .catch((err) => {
+    console.log(err);
+    res.json({"Error": true, "Message": "Error in  MySQL query"}) 
+  })
+});
+
+/* Search by Authed Symbol */
+// router.get('/api/stocks/authed/:symbol?from=:timestampFrom&to=:timestampTo', function(req, res){
+//   req.db.from('stocks').select('*').where('symbol', req.params.symbol)
+  
+//   .then((rows) => {
+//     res.json(rows)})
+
+//   .catch((err) => {
+//     console.log(err);
+//     res.json({"Error": true, "Message": "Error in  MySQL query"}) 
+//   })
+// });
+
+
+
 
 
 
 module.exports = router;
-// connection.query('SELECT * from stocks',function(err, result, fields) {
-//   if (err) {
-//       return console.error(err); 
-//   } else {
-    
-// var arrayLength = result.length; 
-
-// for (var i = 0; i <= arrayLength-1; i++) {
-//     var line = result[i].name + " (" + result[i].symbol + ")";
-//     console.log(line); 
-// }
-//   }
-// }); 
