@@ -14,12 +14,12 @@ router.get('/', function(req, res, next) {
   next()
 });
 
-router.get('/knex', function(req,res,next) { 
-  req.db.raw("SELECT VERSION()").then( 
-    (version)  =>  console.log((version[0][0])) 
-    ).catch((err) =>  {console.log(err); throw err})
-    res.send("Version Logged successfully");
-  });   
+// router.get('/knex', function(req,res,next) { 
+//   req.db.raw("SELECT VERSION()").then( 
+//     (version)  =>  console.log((version[0][0])) 
+//     ).catch((err) =>  {console.log(err); throw err})
+//     res.send("Version Logged successfully");
+//   });   
 
 /* API page. */
 router.get('/api', function(req, res, next) {
@@ -38,19 +38,17 @@ router.get('/stocks/symbols', function(req, res){
     console.log(err);
     res.json({"Error": true, "Message": "Error in  MySQL query"}) 
   })
+  next()
 }); 
 
 /* Search by Industry */
 router.get("/stocks/symbols", function(req, res, next){
-  //var query = "SELECT DISTINCT name, symbol, industry FROM stocks WHERE industry=param ORDER BY symbol;";
-  
+  //res.send('industry: '+ req.params.indu)
   req.db
   .from('stocks')
   .distinct('name', 'symbol', 'industry')
-  .where({industry: 'utilities'}) //THIS WORKS
-  .orderBy('symbol') // NOT NEEDED
-  // .where({industry: req.params.industry})
-    
+  //.where({industry: 'utilities'}) //THIS WORKS
+  .where({industry: req.query.industry}) //THIS DOESN'T    
   .then((rows) => {
     res.json(rows)})
 
@@ -58,27 +56,28 @@ router.get("/stocks/symbols", function(req, res, next){
     console.log(err);
     res.json({"Error": true, "Message": "Error in  MySQL query"}) 
     })
+    next()
   });
   ; 
 
-/* Search by Symbol */
-router.get('/stocks/symbols', function(req, res){
-  const from = '2020-03-03';
-  const to = '2020-03-27';// JSON SHOWING 1 LESS DAY THAN SWAGGER QUT API
-  req.db.
-  from('stocks')
-  .select('*')
-  .where({symbol: 'AAL'})
-  .whereBetween('timestamp', [from, to]) //THIS WORKS (NEED TO ADD IF STATEMENTS FOR INCASE USER DOESN'T ENTER A FROM OR A TO DATE, SO IT STILL SHOWS DATA)
+// /* Search by Symbol */
+// router.get('/stocks/symbols', function(req, res){
+//   const from = '2020-03-03';
+//   const to = '2020-03-27';// JSON SHOWING 1 LESS DAY THAN SWAGGER QUT API
+//   req.db.
+//   from('stocks')
+//   .select('*')
+//   .where({symbol: 'AAL'})
+//   .whereBetween('timestamp', [from, to]) //THIS WORKS (NEED TO ADD IF STATEMENTS FOR INCASE USER DOESN'T ENTER A FROM OR A TO DATE, SO IT STILL SHOWS DATA)
   
-  .then((rows) => {
-    res.json(rows)})
+//   .then((rows) => {
+//     res.json(rows)})
 
-  .catch((err) => {
-    console.log(err);
-    res.json({"Error": true, "Message": "Error in  MySQL query"}) 
-  })
-});
+//   .catch((err) => {
+//     console.log(err);
+//     res.json({"Error": true, "Message": "Error in  MySQL query"}) 
+//   })
+// });
 
 /* Search by Authed Symbol */
 // router.get('/api/stocks/authed/:symbol?from=:timestampFrom&to=:timestampTo', function(req, res){
