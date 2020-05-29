@@ -42,7 +42,7 @@ router.get('/stocks/symbols', function(req, res, next){
 }); 
 
 /* Search by Industry */
-router.get("/stocks/symbols", function(req, res, next){
+router.get("/stocks/symbols", function(req, res){
   req.db
   .from('stocks')
   .distinct('name', 'symbol', 'industry')
@@ -54,9 +54,8 @@ router.get("/stocks/symbols", function(req, res, next){
     console.log(err);
     res.json({"Error": true, "Message": "Error in  MySQL query"}) 
     })
-    next();
   });
-  ; 
+   
 
 /* Search by Symbol */
 router.get('/stocks/:symbol', function(req, res){
@@ -73,35 +72,28 @@ router.get('/stocks/:symbol', function(req, res){
   })
 });
 
+
+
 /* Search by Authed Symbol */
-// router.get('/api/stocks/authed/:symbol?from=:timestampFrom&to=:timestampTo', function(req, res){
-//   req.db.from('stocks').select('*').where('symbol', req.params.symbol)
+router.get('/stocks/authed/:symbol', function(req, res){
+  const from = req.query.from;
+  const to = req.query.to;// JSON SHOWING 1 LESS DAY THAN SWAGGER QUT API
+  req.db.
+  from('stocks')
+  .select('*')
+  .where({symbol: req.params.symbol}) 
+  .whereBetween('timestamp', [from, to]) //THIS WORKS (NEED TO ADD IF STATEMENTS FOR INCASE USER DOESN'T ENTER A FROM OR A TO DATE, SO IT STILL SHOWS DATA)
   
-//   .then((rows) => {
-//     res.json(rows)})
+  .then((rows) => {
+    res.json(rows)})
 
-//   .catch((err) => {
-//     console.log(err);
-//     res.json({"Error": true, "Message": "Error in  MySQL query"}) 
-//   })
-// });
-// router.get('/stocks/symbols', function(req, res){
-//   const from = '2020-03-03';
-//   const to = '2020-03-27';// JSON SHOWING 1 LESS DAY THAN SWAGGER QUT API
-//   req.db.
-//   from('stocks')
-//   .select('*')
-//   .where({symbol: 'AAL'})
-//   .whereBetween('timestamp', [from, to]) //THIS WORKS (NEED TO ADD IF STATEMENTS FOR INCASE USER DOESN'T ENTER A FROM OR A TO DATE, SO IT STILL SHOWS DATA)
-  
-//   .then((rows) => {
-//     res.json(rows)})
+  .catch((err) => {
+    console.log(err);
+    res.json({"Error": true, "Message": "Error in  MySQL query"}) 
+  })
+});
 
-//   .catch((err) => {
-//     console.log(err);
-//     res.json({"Error": true, "Message": "Error in  MySQL query"}) 
-//   })
-// });
+
 
 
 
