@@ -32,7 +32,7 @@ morgan.token('id', function getId(req) {
   return req.id
 });
 
-var loggerFormat = ':id [:date[web]] ":method :url" :status :response-time';
+var loggerFormat = ':id [:date[web]] ":method :url" :status :response-time\n';
 
 app.use(morgan(loggerFormat, {
   skip: function (req, res) {

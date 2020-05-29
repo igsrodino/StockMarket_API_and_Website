@@ -27,7 +27,7 @@ router.get('/api', function(req, res, next) {
 });
 
 /* All Stocks */
-router.get('/stocks/symbols', function(req, res){
+router.get('/stocks/symbols', function(req, res, next){
   // var query = "SELECT DISTINCT name, symbol, industry FROM ?? ORDER BY symbol;";
 
   req.db.from('stocks').distinct('name', 'symbol', 'industry').orderBy('symbol')
@@ -43,12 +43,10 @@ router.get('/stocks/symbols', function(req, res){
 
 /* Search by Industry */
 router.get("/stocks/symbols", function(req, res, next){
-  //res.send('industry: '+ req.params.indu)
   req.db
   .from('stocks')
   .distinct('name', 'symbol', 'industry')
-  //.where({industry: 'utilities'}) //THIS WORKS
-  .where({industry: req.query.industry}) //THIS DOESN'T    
+  .where({industry: req.query.industry})   
   .then((rows) => {
     res.json(rows)})
 
@@ -56,11 +54,37 @@ router.get("/stocks/symbols", function(req, res, next){
     console.log(err);
     res.json({"Error": true, "Message": "Error in  MySQL query"}) 
     })
-    next()
+    next();
   });
   ; 
 
-// /* Search by Symbol */
+/* Search by Symbol */
+router.get('/stocks/:symbol', function(req, res){
+  req.db
+  .from('stocks')
+  .select('*')
+  .where({symbol: req.params.symbol}) 
+  .then((rows) => {
+    res.json(rows)})
+
+  .catch((err) => {
+    console.log(err);
+    res.json({"Error": true, "Message": "Error in  MySQL query"}) 
+  })
+});
+
+/* Search by Authed Symbol */
+// router.get('/api/stocks/authed/:symbol?from=:timestampFrom&to=:timestampTo', function(req, res){
+//   req.db.from('stocks').select('*').where('symbol', req.params.symbol)
+  
+//   .then((rows) => {
+//     res.json(rows)})
+
+//   .catch((err) => {
+//     console.log(err);
+//     res.json({"Error": true, "Message": "Error in  MySQL query"}) 
+//   })
+// });
 // router.get('/stocks/symbols', function(req, res){
 //   const from = '2020-03-03';
 //   const to = '2020-03-27';// JSON SHOWING 1 LESS DAY THAN SWAGGER QUT API
@@ -78,20 +102,6 @@ router.get("/stocks/symbols", function(req, res, next){
 //     res.json({"Error": true, "Message": "Error in  MySQL query"}) 
 //   })
 // });
-
-/* Search by Authed Symbol */
-// router.get('/api/stocks/authed/:symbol?from=:timestampFrom&to=:timestampTo', function(req, res){
-//   req.db.from('stocks').select('*').where('symbol', req.params.symbol)
-  
-//   .then((rows) => {
-//     res.json(rows)})
-
-//   .catch((err) => {
-//     console.log(err);
-//     res.json({"Error": true, "Message": "Error in  MySQL query"}) 
-//   })
-// });
-
 
 
 
