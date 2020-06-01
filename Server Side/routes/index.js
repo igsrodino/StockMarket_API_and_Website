@@ -1,25 +1,13 @@
-var express = require('express');
+const express = require('express');
 const mysql = require('mysql')
 
 var router = express.Router();
-// var myLogger = function (req, res, next) {
-//   console.log('LOGGED')
-//   next()
-// }
 
-// router.use(myLogger)
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Stocks API' });
   next()
 });
-
-// router.get('/knex', function(req,res,next) { 
-//   req.db.raw("SELECT VERSION()").then( 
-//     (version)  =>  console.log((version[0][0])) 
-//     ).catch((err) =>  {console.log(err); throw err})
-//     res.send("Version Logged successfully");
-//   });   
 
 /* API page. */
 router.get('/api', function(req, res, next) {
@@ -28,8 +16,6 @@ router.get('/api', function(req, res, next) {
 
 /* All Stocks */
 router.get('/stocks/symbols', function(req, res, next){
-  // var query = "SELECT DISTINCT name, symbol, industry FROM ?? ORDER BY symbol;";
-
   req.db.from('stocks').distinct('name', 'symbol', 'industry').orderBy('symbol')
   .then((rows) => {
     res.json(rows)})

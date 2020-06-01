@@ -1,107 +1,68 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
+require("dotenv").config();
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan')
 
+const options = require('./knexfile.js');
+const knex = require('knex')(options);
+const helmet = require("helmet");
+const cors = require("cors");
 const swaggerUI =  require('swagger-ui-express'); 
 yaml = require('yamljs');
 const swaggerDocument = yaml.load('./swagger.yaml'); 
 
 const addRequestId = require('express-request-id')();
-var morgan = require('morgan');
-const logger = require('./logger')
 
-// const db = require('./database/db');
-const options = require('./knexfile.js');
-const knex = require('knex')(options);
+const usersRouter = require('./routes/users');
+const indexRouter = require('./routes/index');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-
-
-app.use(addRequestId);
-
-morgan.token('id', function getId(req) {
-  return req.id
-});
-
-var loggerFormat = ':id [:date[web]] ":method :url" :status :response-time\n';
-
-app.use(morgan(loggerFormat, {
-  skip: function (req, res) {
-      return res.statusCode < 400
-  },
-  stream: process.stderr
-}));
-
-app.use(morgan(loggerFormat, {
-  skip: function (req, res) {
-      return res.statusCode >= 400
-  },
-  stream: process.stdout
-}));
-
-app.use((req, res, next) => {
-  var log = logger.loggerInstance.child({
-    id: req.id,
-    body: req.body
-  }, true)
-  log.info({
-    req: req
-  })
-  next();
-});
-
-app.use(function (req, res, next) {
-  function afterResponse() {
-      res.removeListener('finish', afterResponse);
-      res.removeListener('close', afterResponse);
-      var log = logger.loggerInstance.child({
-          id: req.id
-      }, true)
-     log.info({res:res}, 'response')
-  }
-
-  res.on('finish', afterResponse);
-  res.on('close', afterResponse);
-  next();
-});
-
-
-
-app.post("/stuff", function (req, res) {
-
-  var response = {
-      fullname: `${req.body.firstname} ${req.body.lastname}`
-  }
-  logger.logResponse(req.id, response, 200);
-  res.status(200).send(response);
-});
-
-
-
-
-
+app.use(logger('dev'));
+//app.use(logger('common'));
+app.use(helmet());
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use(db);
-app.use((req, res, next) => {
-  req.db = knex
-  next()
+app.use(addRequestId);
+
+logger.token("req", (req, res) => JSON.stringify(req.headers))
+logger.token("res", (req, res) => {
+  const headers = {}
+  res.getHeaderNames().map((h) => (headers[h] = res.getHeader(h)))
+  return JSON.stringify(headers)
 })
 
+app.use((req, res, next) => {
+  console.log("here")
+  req.db = knex
+  console.log(req.url)
+  next()
+})
+// logger.token('req',(req, res, next) => 
+// JSON.stringify(req.headers))
+
+// logger.token('res',(req, res) => {
+//   const headers = {}  
+//   res.getHeaderNames().map(
+//     h => headers[h] = res.getHeader(h))
+//       return JSON.stringify(headers)
+//   })
+
+//app.use('/user/register', ()=> {console.log("user in")});
+app.use('/user', usersRouter);
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+
 app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 
