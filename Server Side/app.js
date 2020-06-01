@@ -4,7 +4,6 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan')
-
 const options = require('./knexfile.js');
 const knex = require('knex')(options);
 const helmet = require("helmet");
@@ -17,7 +16,6 @@ const addRequestId = require('express-request-id')();
 
 const usersRouter = require('./routes/users');
 const indexRouter = require('./routes/index');
-
 
 const app = express();
 
@@ -44,26 +42,16 @@ logger.token("res", (req, res) => {
 })
 
 app.use((req, res, next) => {
-  console.log("here")
   req.db = knex
-  console.log(req.url)
   next()
 })
-// logger.token('req',(req, res, next) => 
-// JSON.stringify(req.headers))
-
-// logger.token('res',(req, res) => {
-//   const headers = {}  
-//   res.getHeaderNames().map(
-//     h => headers[h] = res.getHeader(h))
-//       return JSON.stringify(headers)
-//   })
 
 //app.use('/user/register', ()=> {console.log("user in")});
 app.use('/user', usersRouter);
 app.use('/', indexRouter);
 
-app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+app.use('/', swaggerUI.serve)
+app.get('/', swaggerUI.setup(swaggerDocument));
 
 
 // catch 404 and forward to error handler
@@ -85,29 +73,4 @@ app.use(function(err, req, res, next) {
 module.exports = app;
 
 
-
-
-
-// var express = require('express');
-// var app = express();
-
-// var requestTime = function(req, res, next) {
-//     req.requestTime = Date.now()
-//     next()
-// }
-
-// app.use(requestTime)
-
-// const hostname = '127.0.0.1';
-// const port = 3000;
-
-// app.get('/', function (req , res) {
-//     var responseText = 'hello Iggy!<br>'
-//     responseText += '<small>Requested at: ' + req.requestTime + '</small>'
-//     res.send(responseText)
-//     });
-
-// app.listen(port, function () {
-//     console.log(`Express app listening at http://${hostname}:${port}/`);
-// });
 
