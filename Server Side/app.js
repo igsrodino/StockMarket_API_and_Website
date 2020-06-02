@@ -17,6 +17,18 @@ const addRequestId = require('express-request-id')();
 const usersRouter = require('./routes/users');
 const indexRouter = require('./routes/index');
 
+// const fs = require('fs');
+// const https = require('https');
+// const privateKey = fs.readFileSync('./sslcert/cert.key', 'utf8');
+// const certificate = fs.readFileSynch('./sslcert/cert.pem', 'utf8');
+// const credentials = {
+//   key: privateKey,
+//   cert: certificate
+// };
+
+// const server = https.createServer(credentials, app);
+// server.listenerCount(443);
+
 const app = express();
 
 // view engine setup
