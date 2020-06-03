@@ -8,12 +8,12 @@ info:
 components:
   securitySchemes:
     bearerAuth:            # arbitrary name for the security scheme
-      type: http
+      type: https
       scheme: bearer
       bearerFormat: JWT
 
 servers:
-  - url: http://localhost:3000
+  - url: https://172.22.31.176:443
 paths:
   /stocks/symbols:
     get:

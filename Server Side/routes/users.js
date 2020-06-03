@@ -16,7 +16,7 @@ router.post('/register', function (req, res, next){
     })
     return;
 }
-const queryUsers = req.db.from("users").select("*").where("email", "=", email)
+const queryUsers = req.db.from("users").select("*").where({email})
 queryUsers
   .then ((users) => {
     if (users.length > 0) {
@@ -32,6 +32,7 @@ queryUsers
         const hash = bcrypt.hashSync(password, saltRounds)
         return req.db.from("users").insert({email, hash})
   }})
+  
   .then(() => {
     res.status(201).json({
         success: true, 
@@ -54,7 +55,7 @@ router.post("/login", function(req, res, next){
     }
 
 
-    const queryUsers = req.db.from("users").select("*").where("email", "=", email)
+    const queryUsers = req.db.from("users").select("*").where({email})
     queryUsers
     .then ((users) => {
         if (users.length === 0) {

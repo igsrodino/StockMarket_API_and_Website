@@ -5,31 +5,32 @@ var router = express.Router();
 var jwt = require('jsonwebtoken');
 
 
-/* API page. */
-router.get('/api', function(req, res, next) {
-  res.render('index', { title: 'Routes available' });
-});
-
-/* All Stocks */
-router.get('/stocks/symbols', function(req, res, next){
-  req.db.from('stocks').distinct('name', 'symbol', 'industry').orderBy('symbol')
-  .then((rows) => {
-    res.json(rows)})
+// /* All Stocks */
+// router.get('/stocks/symbols', function(req, res, next){
+//   req.db.from('stocks').distinct('name', 'symbol', 'industry').orderBy('symbol')
+//   .then((rows) => 
+//     res.json(rows))
     
-  .catch((err) => {
-    console.log(err);
-    res.json({"Error": true, "Message": "Error in  MySQL query"}) 
-  })
-  next()
-}); 
+//   .catch((err) => {
+//     console.log(err);
+//     res.json({"Error": true, "Message": "Error in  MySQL query"}) 
+//   })
+//   next()
+// }); 
 
 /* Search by Industry */
 router.get("/stocks/symbols", function(req, res){
+  var query = req.query.industry;
+  //industry = null;
   req.db
   .from('stocks')
   .distinct('name', 'symbol', 'industry')
-  .where({industry: req.query.industry})   
+  .where({industry: query})   
   .then((rows) => {
+    if (query !== {}){ //DOESN'T WORK
+      console.log("empty")
+    }
+      
     res.json(rows)})
 
   .catch((err) => {
@@ -39,20 +40,45 @@ router.get("/stocks/symbols", function(req, res){
   });
    
 
+
+
+
+
 /* Search by Symbol */
 router.get('/stocks/:symbol', function(req, res){
+  var param = req.params.symbol;
+  //var capitalLetters = /[A-Z]/;
   req.db
   .from('stocks')
-  .select('*')
-  .where({symbol: req.params.symbol}) 
+  .select('*')  
+  .where({symbol: param}) 
+
   .then((rows) => {
-    res.json(rows)})
+    if (!param.match(/\b[A-Z]{1,5}\b/)) { //WORKS BUT FAILS TESTS
+      return res.status(400).json({
+        error: true,
+        message: "Stock symbol incorrect format - must be 1-5 capital letters"
+      })
+      
+    }
+    else if (rows.length === 0){
+      return res.status(404).json({ // WORKS
+        error: true,
+        message: "No entry for symbol in stocks database"
+      })
+    }
+    
+      res.json(rows[0])})
 
   .catch((err) => {
-    console.log(err);
-    res.json({"Error": true, "Message": "Error in  MySQL query"}) 
+      console.log(err);
+      res.json({"Error": true, "Message": "Error in  MySQL query"}) 
   })
 });
+
+
+
+
 
 
 const authorize = (req, res, next) => {
