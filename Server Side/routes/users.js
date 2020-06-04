@@ -16,9 +16,8 @@ router.post('/register', function (req, res, next){
     })
     return;
 }
-const queryUsers = req.db.from("users").select("*").where({email})
-queryUsers
-  .then ((users) => {
+req.db.from("users").select("*").where({email})
+    .then ((users) => {
     if (users.length > 0) {
       res.status(409).json({
         error:true, 
@@ -27,11 +26,11 @@ queryUsers
       return;
     }
     else{
-        //Insert user into DB
+        //Insert user into database
         const saltRounds = 10
         const hash = bcrypt.hashSync(password, saltRounds)
         return req.db.from("users").insert({email, hash})
-  }})
+    }})
   
   .then(() => {
     res.status(201).json({
@@ -55,8 +54,7 @@ router.post("/login", function(req, res, next){
     }
 
 
-    const queryUsers = req.db.from("users").select("*").where({email})
-    queryUsers
+    req.db.from("users").select("*").where({email})
     .then ((users) => {
         if (users.length === 0) {
             console.log("User does not exist")
@@ -64,6 +62,7 @@ router.post("/login", function(req, res, next){
         }
         else{
         console.log("User exists in table")
+        
         //Compare password hashes
         const user = users[0]
         return bcrypt.compare(password, user.hash)
@@ -75,7 +74,6 @@ router.post("/login", function(req, res, next){
                 error: true,
                 message: "Incorrect email or password"
             })  
-            //console.log("Passwords do not match")
             return
         }
 
@@ -86,7 +84,6 @@ router.post("/login", function(req, res, next){
         const exp = Math.floor(Date.now() /1000) + expires_in
         const token = jwt.sign({email, exp}, secretKey)
         res.json({token_type: "Bearer", token, expires_in})
-        console.log(token)
     })
     .then(() => {
         res.status(201).json({
