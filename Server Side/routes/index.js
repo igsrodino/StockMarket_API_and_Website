@@ -5,49 +5,47 @@ var router = express.Router();
 var jwt = require('jsonwebtoken');
 
 
-// /* All Stocks */
-// router.get('/stocks/symbols', function(req, res, next){
-//   req.db.from('stocks').distinct('name', 'symbol', 'industry').orderBy('symbol')
-//   .then((rows) => 
-//     res.json(rows))
-    
-//   .catch((err) => {
-//     console.log(err);
-//     res.json({"Error": true, "Message": "Error in  MySQL query"}) 
-//   })
-//   next()
-// }); 
+/* All Stocks */
+router.get('/stocks/symbols', function(req, res, next){
+  req.db.from('stocks').distinct('name', 'symbol', 'industry').orderBy('symbol')
+  .then((rows) => 
+    {
+    if(Object.keys(req.query).length === 0 ){
+      res.json(rows)}})
+  
+  next() // Comment this line out and empty search works, but .get below stops working
+}); 
 
 /* Search by Industry */
 router.get("/stocks/symbols", function(req, res){
   var query = req.query.industry;
-  //industry = null;
-  req.db
-  .from('stocks')
-  .distinct('name', 'symbol', 'industry')
-  .where({industry: query})   
-  .then((rows) => {
-    if (query !== {}){ //DOESN'T WORK
-      console.log("empty")
-    }
-      
-    res.json(rows)})
+  console.log(req.query)
+  console.log(req.query.industry)
 
-  .catch((err) => {
-    console.log(err);
-    res.json({"Error": true, "Message": "Error in  MySQL query"}) 
-    })
+  if(Object.keys(req.query).length > 0 && !req.query.industry){
+    res.status(400).json({error: true, message: "Bad Request"})
+  }
+  if(Object.keys(req.query).length > 0 && !req.query.industry){
+    res.status(404).json({error: true, message: "Not Found"})
+  }
+  req.db
+    .from('stocks')
+    .distinct('name', 'symbol', 'industry')
+    .where('industry', 'like', `%${query}%` )   // HOW TO USE LIKE IN NON RAW
+    .then((rows) => {
+      res.json(rows)})
+
+    .catch((err) => {
+      console.log(err);
+      res.json({"Error": true, "Message": "Error in  MySQL query"}) 
+      })
   });
    
-
-
-
-
 
 /* Search by Symbol */
 router.get('/stocks/:symbol', function(req, res){
   var param = req.params.symbol;
-  //var capitalLetters = /[A-Z]/;
+  
   req.db
   .from('stocks')
   .select('*')  
@@ -57,10 +55,10 @@ router.get('/stocks/:symbol', function(req, res){
     if (!param.match(/\b[A-Z]{1,5}\b/)) { //WORKS BUT FAILS TESTS
       return res.status(400).json({
         error: true,
-        message: "Stock symbol incorrect format - must be 1-5 capital letters"
+        message: "Bad Request"
       })
-      
     }
+
     else if (rows.length === 0){
       return res.status(404).json({ // WORKS
         error: true,
@@ -68,18 +66,14 @@ router.get('/stocks/:symbol', function(req, res){
       })
     }
     
-      res.json(rows[0])})
+    else{
+      res.json(rows[0])}})
 
   .catch((err) => {
       console.log(err);
       res.json({"Error": true, "Message": "Error in  MySQL query"}) 
   })
 });
-
-
-
-
-
 
 const authorize = (req, res, next) => {
   const authorization = req.headers.authorization
@@ -92,7 +86,7 @@ const authorize = (req, res, next) => {
     console.log("Token: ", token)
   }
   else {
-    res.status(401).json({
+    res.status(403).json({
       error:true, 
       message: "Unauthorized"})
     return
@@ -118,7 +112,17 @@ const authorize = (req, res, next) => {
 /* Search by Authed Symbol */
 router.get('/stocks/authed/:symbol', authorize, function(req, res){
   const from = req.query.from;
-  const to = req.query.to;// JSON SHOWING 1 LESS DAY THAN SWAGGER QUT API
+  const to = req.query.to;
+  const minDate = '2019-11-05T00%3A00%3A00.000Z';
+  const maxDate = '2020-03-25T00%3A00%3A00.000Z';
+
+  if(!req.query.from || !req.query.to){
+    res.status(400).json({error: true, message: "Bad Request"})
+  }
+  if(req.query.from < minDate || req.query.to > maxDate){
+    res.status(404).json({error: true, message: "Not Found"})
+  }
+
   req.db.
   from('stocks')
   .select('*')
