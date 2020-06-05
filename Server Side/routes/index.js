@@ -2,24 +2,23 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
+
 /* Search by Industry */
 router.get("/stocks/symbols", function(req, res){
   const query = req.query.industry ? req.query.industry : "";
 
   if(Object.keys(req.query).length > 0 && !query){
-    res.status(400).json({error: true, message: "Bad Request"})
+    res.status(400).json({
+      error: true, 
+      message: "Bad Request"})
   }
-  // if(Object.keys(req.query).length > 0 && !req.query.industry){
-  //   res.status(404).json({error: true, message: "Not Found"})
-  // }
 
   req.db
     .from('stocks')
     .distinct('name', 'symbol', 'industry')
     .where('industry', 'like', `%${query}%` )   
     .then((rows) => {
-      if (rows.length === 0){ // NEED TO WRITE AS QUERY NOT FOUND, NOT NO QUERY
-        //return 
+      if (rows.length === 0){ 
          res.status(404).json({error: true, message: "Not Found"})
       }
       else{
@@ -34,7 +33,10 @@ router.get("/stocks/symbols", function(req, res){
 /* Search by Symbol */
 router.get('/stocks/:symbol', function(req, res){
   const param = req.params.symbol;
-  
+  const from = req.query.from;
+  const to = req.query.to;
+
+ 
   req.db
   .from('stocks')
   .select('*')  
@@ -56,10 +58,17 @@ router.get('/stocks/:symbol', function(req, res){
         message: "No entry for symbol in stocks database"
       })
     }
+
+    // Check if date parameters have been entered and if so throw 
+    // status 400 as they're only allowed in authenticated route
+    else if(from||to){
+      res.status(400).json({error: true, message: "Bad Request"})
+    }  
     
     else{
       res.json(rows[0])}})
 
+      
   .catch((err) => {
       res.json({"Error": true, "Message": "Error in  MySQL query" + err}) 
   })
@@ -118,13 +127,13 @@ router.get('/stocks/authed/:symbol', authorize, function(req, res){
   const minDate = '2019-11-05T00%3A00%3A00.000Z';
   const maxDate = '2020-03-25T00%3A00%3A00.000Z';
 
+
+
   // If user doesn't input a from or to date, show error 400
   if(!from || !to){
     res.status(400).json({error: true, message: "Bad Request"})
   }
-  if(Object.keys(from).isDate || Object.keys(to).isDate){
-    res.status(400).json({error: true, message: "Bad Request"}) //DOESN'T WORK
-  }   // DOESN'T WORK use moment library
+
 
   // If user enteres a date that is out of bound, show error 404
   if(from < minDate || to > maxDate){
